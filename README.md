@@ -48,7 +48,7 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 ## Setup Instructions
 
 1. **Clone the repository**  
-   git clone https://github.com/vansh3007/WingsFly.git
+   git clone https://github.com/def-Siddharth-Mishra/WingsFly.git
    cd home-screen-task
 
 2. **Install dependencies**  
@@ -59,6 +59,11 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 
    Or on iOS (Mac only):
    npx react-native run-ios
+
+3. **If Andriod/gredlew asks for permission**  
+
+   cd android
+   chmod +x gradlew
 
 > ⚠️ Ensure a device/emulator is running and your environment is properly set up for React Native CLI.
 
@@ -80,19 +85,23 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 
 ###  Home Screen
 
-<img src="./screenshots/Screenshot_20250707_132930_WingsFly.jpg" width="300" />
+<img src="/screenshots/Screenshot_1752070594.png" width="300" />
+<img src="/screenshots/Screenshot_1752070618.png" width="300" />
+
 
 ###  Bottom Drawer
 
-<img src="./screenshots/Screenshot_20250707_132938_WingsFly.jpg" width="300" />
+<img src="/screenshots/Screenshot_1752070604.png" width="300" />
+<img src="/screenshots/Screenshot_1752070627.png" width="300" />
+
 
 ---
 
 ##  Author
 
 - **Your Name**  
-- [GitHub Profile](https://github.com/vansh3007)  
-- Email: vanshshrivastava30@gmail.com
+- [GitHub Profile](https://github.com/def-Siddharth-Mishra)  
+- Email: siddharthmishra918@gmail.com
 
 ---
 
