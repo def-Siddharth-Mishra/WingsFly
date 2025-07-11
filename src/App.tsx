@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HomeScreen from './screens/HomeScreen';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { TaskProvider } from './context/TaskContext';
 
 const AppContent = () => {
   const { theme } = useTheme();
@@ -18,7 +19,9 @@ const AppContent = () => {
 export default function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <TaskProvider>
+        <AppContent />
+      </TaskProvider>
     </ThemeProvider>
   );
 }

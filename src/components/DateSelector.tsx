@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -7,46 +7,44 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { DateSelectorProps, DateItem } from '../types';
+import { generateDateData } from '../data/mockData';
 
-const dateData = [
-  { day: 'Sun', date: 15 },
-  { day: 'Mon', date: 16 },
-  { day: 'Tue', date: 17 },
-  { day: 'Wed', date: 18 },
-  { day: 'Thu', date: 19 },
-  { day: 'Fri', date: 20 },
-  { day: 'Sat', date: 21 },
-];
-
-const DateSelector = () => {
+const DateSelector: React.FC<DateSelectorProps> = ({
+  selectedDate,
+  onDateSelect,
+  dates = generateDateData(),
+}) => {
   const { theme } = useTheme();
-  const [selectedDate, setSelectedDate] = useState(18);
 
   return (
     <FlatList
-      data={dateData}
+      data={dates}
       horizontal
       showsHorizontalScrollIndicator={false}
       keyExtractor={item => item.date.toString()}
       contentContainerStyle={[styles.container, { backgroundColor: theme.colors.surface }]}
       renderItem={({ item }) => {
         const isSelected = item.date === selectedDate;
+        const isToday = item.isToday;
 
         return (
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => setSelectedDate(item.date)}
+            onPress={() => onDateSelect(item.date)}
             style={[
               styles.dateButton,
               isSelected 
                 ? { backgroundColor: theme.colors.primary }
                 : { backgroundColor: theme.colors.border },
+              isToday && !isSelected && { borderWidth: 2, borderColor: theme.colors.primary },
             ]}
           >
             <Text
               style={[
                 styles.dayText, 
-                { color: isSelected ? '#FFFFFF' : theme.colors.textMuted }
+                { color: isSelected ? '#FFFFFF' : theme.colors.textMuted },
+                isToday && !isSelected && { color: theme.colors.primary, fontWeight: '600' },
               ]}
             >
               {item.day}
@@ -65,7 +63,8 @@ const DateSelector = () => {
               <Text
                 style={[
                   styles.dateText, 
-                  { color: isSelected ? '#FFFFFF' : theme.colors.text }
+                  { color: isSelected ? '#FFFFFF' : theme.colors.text },
+                  isToday && !isSelected && { color: theme.colors.primary, fontWeight: '700' },
                 ]}
               >
                 {item.date}

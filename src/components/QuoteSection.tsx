@@ -9,22 +9,22 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
+import { QuoteSectionProps } from '../types';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const QuoteSection = () => {
+const QuoteSection: React.FC<QuoteSectionProps> = ({ quote }) => {
   const { theme } = useTheme();
-  const progressPercent = 0.65;
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(progressAnim, {
-      toValue: progressPercent,
+      toValue: quote.progress,
       duration: 1000,
       useNativeDriver: false,
       easing: Easing.out(Easing.exp),
     }).start();
-  }, [progressPercent, progressAnim]);
+  }, [quote.progress, progressAnim]);
 
   const animatedBarWidth = progressAnim.interpolate({
     inputRange: [0, 1],
@@ -40,12 +40,17 @@ const QuoteSection = () => {
     <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       <Text style={[styles.title, { color: theme.colors.text }]}>Today's Quote</Text>
       <Text style={[styles.quote, { color: theme.colors.textSecondary }]}>
-        "You must do the things, you think you cannot do."
+        "{quote.text}"
       </Text>
+      {quote.author && (
+        <Text style={[styles.author, { color: theme.colors.textMuted }]}>
+          - {quote.author}
+        </Text>
+      )}
 
       <View style={styles.progressBarContainer}>
         <Text style={[styles.progressLabel, { color: theme.colors.progressFill }]}>
-          Progress {Math.round(progressPercent * 100)}%
+          Progress {Math.round(quote.progress * 100)}%
         </Text>
         <View style={[styles.progressBarWrapper, { backgroundColor: theme.colors.progressTrack }]}>
           {/* Base Track */}
@@ -114,7 +119,14 @@ const styles = StyleSheet.create({
   quote: {
     fontSize: 15,
     textAlign: 'center',
+    marginBottom: 4,
+    fontStyle: 'italic',
+  },
+  author: {
+    fontSize: 13,
+    textAlign: 'center',
     marginBottom: 8,
+    fontWeight: '500',
   },
   progressBarContainer: {
     paddingHorizontal: 16,

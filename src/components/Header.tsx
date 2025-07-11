@@ -1,32 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from '../context/ThemeContext';
+import { HeaderProps } from '../types';
+import SearchBar from './ui/SearchBar';
 
-const Header = () => {
+const Header: React.FC<HeaderProps> = ({
+  onSearchPress,
+  onCalendarPress,
+  onHelpPress,
+}) => {
   const { theme, toggleTheme, isDarkMode } = useTheme();
+  const [isSearchActive, setIsSearchActive] = useState(false);
+
+  const handleSearchToggle = () => {
+    setIsSearchActive(!isSearchActive);
+    if (!isSearchActive && onSearchPress) {
+      onSearchPress();
+    }
+  };
+
+  const handleSearch = (query: string) => {
+    // This will be handled by the parent component
+    console.log('Search query:', query);
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       {/* Left Logo & Brand */}
-      <View style={styles.leftSection}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={[styles.brandText, { color: theme.colors.text }]}>WingsFly</Text>
-      </View>
+      {!isSearchActive && (
+        <View style={styles.leftSection}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <Text style={[styles.brandText, { color: theme.colors.text }]}>WingsFly</Text>
+        </View>
+      )}
+
+      {/* Search Bar */}
+      <SearchBar
+        isActive={isSearchActive}
+        onToggle={handleSearchToggle}
+        onSearch={handleSearch}
+      />
 
       {/* Right Icons */}
-      <View style={styles.iconGroup}>
-        <Feather name="search" size={20} style={[styles.icon, { color: theme.colors.text }]} />
-        <Feather name="calendar" size={20} style={[styles.icon, { color: theme.colors.text }]} />
-        <TouchableOpacity onPress={toggleTheme}>
-          <Feather 
-            name={isDarkMode ? "sun" : "moon"} 
-            size={20} 
-            style={[styles.icon, { color: theme.colors.text }]} 
-          />
-        </TouchableOpacity>
-        <Feather name="help-circle" size={20} style={[styles.icon, { color: theme.colors.text }]} />
-      </View>
+      {!isSearchActive && (
+        <View style={styles.iconGroup}>
+          <TouchableOpacity onPress={onCalendarPress}>
+            <Feather name="calendar" size={20} style={[styles.icon, { color: theme.colors.text }]} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleTheme}>
+            <Feather 
+              name={isDarkMode ? "sun" : "moon"} 
+              size={20} 
+              style={[styles.icon, { color: theme.colors.text }]} 
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onHelpPress}>
+            <Feather name="help-circle" size={20} style={[styles.icon, { color: theme.colors.text }]} />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

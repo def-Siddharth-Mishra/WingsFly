@@ -1,83 +1,153 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useRef } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Image, 
+  TouchableOpacity, 
+  Animated, 
+  PanGestureHandler,
+  State,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../context/ThemeContext';
+import { TaskItemProps } from '../types';
 
-const TaskItem = ({
-  image,
-  title,
-  time,
-  timeColor,
-  tags,
-  status,
-}: {
-  image: any;
-  title: string;
-  time: string;
-  timeColor: string;
-  tags: string[];
-  status: 'done' | 'pending' | 'upcoming';
+const TaskItem: React.FC<TaskItemProps> = ({
+  task,
+  onToggleComplete,
+  onPress,
+  onDelete,
 }) => {
   const { theme } = useTheme();
-  const [mainTag, subTag] = tags;
+  const [mainTag, subTag] = task.tags;
+  const translateX = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
+
+  const handleToggleComplete = () => {
+    if (onToggleComplete) {
+      // Add a subtle animation when toggling
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 0.5,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start();
+      
+      onToggleComplete(task.id);
+    }
+  };
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress(task);
+    }
+  };
+
+  const handleLongPress = () => {
+    // Add haptic feedback or show context menu
+    console.log('Long press on task:', task.title);
+  };
 
   const renderStatusIcon = () => {
-    if (status === 'done') {
+    if (task.status === 'done') {
       return (
-        <View style={[styles.statusCircle, { backgroundColor: theme.colors.statusDone }]}>
+        <TouchableOpacity 
+          style={[styles.statusCircle, { backgroundColor: theme.colors.statusDone }]}
+          onPress={handleToggleComplete}
+        >
           <Icon name="check" size={14} color="#fff" />
-        </View>
+        </TouchableOpacity>
       );
     } else {
       return (
-        <View style={[styles.statusCircleOutline, { 
-          backgroundColor: theme.colors.statusPending,
-          borderColor: theme.colors.statusPending 
-        }]}>
+        <TouchableOpacity 
+          style={[styles.statusCircleOutline, { 
+            backgroundColor: theme.colors.statusPending,
+            borderColor: theme.colors.statusPending 
+          }]}
+          onPress={handleToggleComplete}
+        >
           <Icon
-            name={status === 'pending' ? 'clock-outline' : 'chevron-right'}
+            name={task.status === 'pending' ? 'clock-outline' : 'chevron-right'}
             size={14}
             color={theme.colors.text}
           />
-        </View>
+        </TouchableOpacity>
       );
     }
   };
 
+  const getPriorityColor = () => {
+    switch (task.priority) {
+      case 'high': return theme.colors.error;
+      case 'medium': return theme.colors.warning;
+      case 'low': return theme.colors.success;
+      default: return theme.colors.textMuted;
+    }
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
-      {/* Image */}
-      <View style={[styles.imageBox, { backgroundColor: theme.colors.surface }]}>
-        <Image source={image} style={styles.image} resizeMode="contain" />
-      </View>
+    <Animated.View style={{ opacity }}>
+      <TouchableOpacity 
+        style={[styles.container, { backgroundColor: theme.colors.surface }]}
+        onPress={handlePress}
+        onLongPress={handleLongPress}
+        activeOpacity={0.7}
+      >
+        {/* Priority Indicator */}
+        <View style={[styles.priorityIndicator, { backgroundColor: getPriorityColor() }]} />
+        
+        {/* Image */}
+        <View style={[styles.imageBox, { backgroundColor: theme.colors.surface }]}>
+          <Image source={task.image} style={styles.image} resizeMode="contain" />
+        </View>
 
-      {/* Content */}
-      <View style={styles.content}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>{title}</Text>
-
-        <View style={styles.metaRow}>
-          {/* Time pill */}
-          <View
-            style={[styles.timePill, { backgroundColor: `${timeColor}20` }]}
+        {/* Content */}
+        <View style={styles.content}>
+          <Text 
+            style={[
+              styles.title, 
+              { 
+                color: theme.colors.text,
+                textDecorationLine: task.status === 'done' ? 'line-through' : 'none',
+                opacity: task.status === 'done' ? 0.7 : 1,
+              }
+            ]}
           >
-            <Icon name="clock-outline" size={13} color={timeColor} />
-            <Text style={[styles.timeText, { color: timeColor }]}>{time}</Text>
-          </View>
+            {task.title}
+          </Text>
 
-          {/* Tags */}
-          <View style={[styles.tagRow, { backgroundColor: theme.colors.tagBackground }]}>
-            <Text style={[styles.tagText, { color: theme.colors.textMuted }]}>
-              {mainTag}
-              {subTag ? ` | ${subTag}` : ''}
-            </Text>
-            <Icon name="flag-outline" size={13} color={theme.colors.textMuted} />
+          <View style={styles.metaRow}>
+            {/* Time pill */}
+            <View
+              style={[styles.timePill, { backgroundColor: `${task.timeColor}20` }]}
+            >
+              <Icon name="clock-outline" size={13} color={task.timeColor} />
+              <Text style={[styles.timeText, { color: task.timeColor }]}>{task.time}</Text>
+            </View>
+
+            {/* Tags */}
+            <View style={[styles.tagRow, { backgroundColor: theme.colors.tagBackground }]}>
+              <Text style={[styles.tagText, { color: theme.colors.textMuted }]}>
+                {mainTag}
+                {subTag ? ` | ${subTag}` : ''}
+              </Text>
+              <Icon name="flag-outline" size={13} color={theme.colors.textMuted} />
+            </View>
           </View>
         </View>
-      </View>
 
-      {/* Status Icon */}
-      {renderStatusIcon()}
-    </View>
+        {/* Status Icon */}
+        {renderStatusIcon()}
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
@@ -93,6 +163,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+    position: 'relative',
+  },
+  priorityIndicator: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
   },
   imageBox: {
     borderRadius: 50,

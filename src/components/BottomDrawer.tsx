@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,16 +9,44 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../context/ThemeContext';
+import { BottomDrawerProps } from '../types';
+import TaskForm from './forms/TaskForm';
 
-const BottomDrawer = ({
+const BottomDrawer: React.FC<BottomDrawerProps> = ({
   visible,
   onClose,
-}: {
-  visible: boolean;
-  onClose: () => void;
+  onOptionSelect,
 }) => {
   const { theme } = useTheme();
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [selectedTaskType, setSelectedTaskType] = useState<'habit' | 'task' | 'recurring' | 'goal'>('task');
+
+  const handleOptionPress = (type: 'habit' | 'task' | 'recurring' | 'goal') => {
+    setSelectedTaskType(type);
+    setShowTaskForm(true);
+  };
+
+  const handleCloseTaskForm = () => {
+    setShowTaskForm(false);
+    onClose();
+  };
   
+  if (showTaskForm) {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={visible}
+        onRequestClose={handleCloseTaskForm}
+      >
+        <TaskForm
+          onClose={handleCloseTaskForm}
+          taskType={selectedTaskType}
+        />
+      </Modal>
+    );
+  }
+
   return (
     <Modal
       animationType="slide"
@@ -36,22 +64,25 @@ const BottomDrawer = ({
             icon="brain"
             label="Habit"
             description="Activity that repeats over time it has detailed tracking and statistics."
-            
+            onPress={() => handleOptionPress('habit')}
           />
           <DrawerOption
             icon="repeat"
             label="Recurring Task"
             description="Activity that repeats over time it has detailed tracking and statistics."
+            onPress={() => handleOptionPress('recurring')}
           />
           <DrawerOption
             icon="check"
             label="Task"
             description="Single instance activity without tracking over time."
+            onPress={() => handleOptionPress('task')}
           />
           <DrawerOption
             icon="target"
             label="Goal of the Day"
             description="A specific target set for oneself to achieve within a single day."
+            onPress={() => handleOptionPress('goal')}
           />
         </View>
       </TouchableOpacity>
@@ -63,15 +94,20 @@ const DrawerOption = ({
   icon,
   label,
   description,
+  onPress,
 }: {
   icon: string;
   label: string;
   description: string;
+  onPress: () => void;
 }) => {
   const { theme } = useTheme();
   
   return (
-    <Pressable style={[styles.option, { borderColor: theme.colors.border }]}>
+    <Pressable 
+      style={[styles.option, { borderColor: theme.colors.border }]}
+      onPress={onPress}
+    >
       <View style={[styles.iconCircle, { backgroundColor: theme.colors.iconBackground }]}>
         <Icon name={icon} size={20} color={theme.colors.secondary} />
       </View>

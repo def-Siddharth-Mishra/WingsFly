@@ -1,6 +1,6 @@
-# Home Screen UI - React Native CLI Task
+# WingsFly - Enhanced Task Management App
 
-This project is a submission for the **Fresher Developer Test Task**. It replicates the **Home Screen** from the provided Figma design using **React Native CLI** (no Expo), focusing on modular structure, clean UI, smooth animations, and good development practices.
+This project is an **enhanced version** of the original Home Screen UI task, now featuring a complete task management system with **improved code quality**, **reusable components**, and **additional features**. Built with **React Native CLI** and **TypeScript**, focusing on production-ready code architecture and user experience.
 
 ---
 
@@ -24,22 +24,37 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 
 ---
 
-## Folder Structure
+## 🏗️ Enhanced Architecture
 
 ```
 /WingsFly
 ├── /src 
-    ├── /assets                  
+    ├── /assets                  # Images and icons
     ├── /components
-    │   ├── DateSelector.tsx
-    │   ├── QuoteSection.tsx
-    │   ├── TaskItem.tsx
+    │   ├── /ui                  # Reusable UI components
+    │   │   ├── Button.tsx       # Custom button with variants
+    │   │   ├── Input.tsx        # Enhanced input with validation
+    │   │   ├── SearchBar.tsx    # Animated search component
+    │   │   └── FilterChips.tsx  # Status filter chips
+    │   ├── /forms               # Form components
+    │   │   └── TaskForm.tsx     # Complete task creation form
+    │   ├── DateSelector.tsx     # Enhanced date picker
+    │   ├── QuoteSection.tsx     # Interactive quote display
+    │   ├── TaskItem.tsx         # Advanced task component
+    │   ├── Header.tsx           # App header with search
     │   ├── FloatingActionButton.tsx
-    │   └── BottomDrawer.tsx
+    │   └── BottomDrawer.tsx     # Functional drawer
+    ├── /context                 # State management
+    │   ├── ThemeContext.tsx     # Theme system
+    │   └── TaskContext.tsx      # Task management
+    ├── /data                    # Data layer
+    │   └── mockData.ts          # Mock data and generators
+    ├── /types                   # TypeScript definitions
+    │   └── index.ts             # All type definitions
     ├── /screens
-    │   └── HomeScreen.tsx
-    └── App.tsx
-├── Readme.md
+    │   └── HomeScreen.tsx       # Main screen with filtering
+    └── App.tsx                  # Root component
+├── README.md
 └── screenshots
 ```
 
@@ -85,16 +100,29 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 
 ###  Home Screen
 
-<img src="/screenshots/Screenshot_1752070594.png" width="300" />
+<img src="/screenshots/Home-Page-Light.jpeg" width="300" />
 
-<img src="/screenshots/Screenshot_1752070618.png" width="300" />
+<img src="/screenshots/Home-Page-Dark.jpeg" width="300" />
 
 
 ###  Bottom Drawer
 
-<img src="/screenshots/Screenshot_1752070604.png" width="300" />
+<img src="/screenshots/Floating-Action-Button-Light.jpeg" width="300" />
 
-<img src="/screenshots/Screenshot_1752070627.png" width="300" />
+<img src="/screenshots/Floating-Action-Button-Dark.jpeg" width="300" />
+
+
+### Adding Task
+
+<img src="/screenshots/Create-Habit-Light.jpeg" width="300">
+
+<img src="/screenshots/Create-Habit-Dark.jpeg" width="300">
+
+
+
+### Searching
+
+<img src="/screenshots/Search-Button.jpeg">
 
 
 ---
