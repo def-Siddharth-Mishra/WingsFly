@@ -86,12 +86,14 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 ###  Home Screen
 
 <img src="/screenshots/Screenshot_1752070594.png" width="300" />
+
 <img src="/screenshots/Screenshot_1752070618.png" width="300" />
 
 
 ###  Bottom Drawer
 
 <img src="/screenshots/Screenshot_1752070604.png" width="300" />
+
 <img src="/screenshots/Screenshot_1752070627.png" width="300" />
 
 
@@ -105,5 +107,4 @@ This project is a submission for the **Fresher Developer Test Task**. It replica
 
 ---
 
-# WingsFly
 # WingsFly
