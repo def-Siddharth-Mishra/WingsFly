@@ -122,7 +122,7 @@ This project is an **enhanced version** of the original Home Screen UI task, now
 
 ### Searching
 
-<img src="/screenshots/Search-Button.jpeg">
+<img src="/screenshots/Search-Button.jpeg" width="300">
 
 
 ---
