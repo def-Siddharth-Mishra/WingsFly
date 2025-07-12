@@ -145,7 +145,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose, taskType = 'task' }) => {
           onChangeText={(time) => setFormData(prev => ({ ...prev, time }))}
           error={errors.time}
           required
-          keyboardType="numeric"
+          keyboardType="numbers-and-punctuation"
         />
 
         <View style={styles.prioritySection}>
